@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+</head>
+
+<body>
+	<div th:fragment="navbar">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" href="#"><i class="fab fa-shopify"></i>
+				SHOP</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><a class="nav-link"
+						th:href="@{/shop}"><i class="fas fa-home"></i> Home <span
+							class="sr-only">(current)</span></a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/shop/about-us}"><i class="fas fa-info-circle"></i>
+							About Us</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/shop/contact-us}"><i class="fas fa-address-book"></i>
+							Contact Us</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/shop/my-favorites}"><i class="fas fa-heart"></i>
+							My favorites</a></li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" role="button"
+						data-toggle="dropdown" aria-expanded="false"> <i
+							class="fas fa-shopping-cart"></i> Panier <span
+							class="badge badge-success" th:if="${session.cartQuantity != null}" th:text="${session.cartQuantity}">0</span>
+					</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" th:href="@{/shop/my-order}">My order</a>
+							<a class="dropdown-item" th:href="@{/shop/order-history}">Order
+								history</a>
+						</div></li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" role="button"
+						data-toggle="dropdown" aria-expanded="false"> <i
+							class="fas fa-user-circle"></i> 
+							<span th:if="${session.user == null}">Account</span>
+							<span th:unless="${session.user == null}">User</span>
+					</a>
+						<div class="dropdown-menu" th:unless="${session.user} == null">
+							<a class="dropdown-item" th:href="@{/shop/account/logout}">Logout</a>
+						</div>
+						<div class="dropdown-menu" th:if="${session.user} == null">
+							<a class="dropdown-item" th:href="@{/shop/account/login}">Login</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" th:href="@{/shop/account/register}">Register</a><a
+								class="dropdown-item" th:href="@{/shop/account/forgot-password}">Forgot
+								password</a>
+						</div></li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0">
+					<input class="form-control mr-sm-2" type="search"
+						placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+						<i class="fas fa-search"></i> Search
+					</button>
+				</form>
+			</div>
+		</nav>
+	</div>
+</body>
+
+</html>

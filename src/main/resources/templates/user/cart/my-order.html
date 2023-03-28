@@ -1,0 +1,81 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{user/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+
+		<div class="col-md-8 offset-md-2 mt-3">
+			<div class="row" th:if="${quantity} == 0">
+				<div class="col-md-6 offset-md-3">
+					<h3>No item</h3>
+				</div>
+			</div>
+
+			<div class="row mt-3" th:if="${quantity} > 0">
+				<table class="table table-borderless text-center">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col" style="max-width: 150px;">Hình</th>
+							<th scope="col">Name</th>
+							<th scope="col">Price</th>
+							<th scope="col" style="max-width: 100px;">Quantity</th>
+							<th scope="col">Total</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item ,i : ${cart}">
+							<form th:action="@{/shop/my-order/update}" method="post">
+								<input type="hidden" name="id" id="id"
+									th:value="${item.product_id}">
+								<th scope="row" th:text="${i.count}">1</th>
+								<td style="max-width: 150px;"><img
+									th:src="${item.image!=null ? '/uploads/' + item.image : ''}"
+									class="img-rounded" alt="..."></td>
+								<td class="font-italic font-weight-bold"><a
+									th:href="@{/shop/deltail(id=${item.product_id})}"
+									th:text="${item.name}"></a></td>
+								<td class="font-italic text-danger"
+									th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">500.000
+									VND</td>
+								<td style="max-width: 100px;"><input type="number"
+									class="form-control" name="quantity" id="quantity" min="1"
+									th:value="${item.quantity}" onblur="this.form.submit()"></td>
+								<td class="font-italic font-weight-bold text-danger"
+									th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 0, 'POINT')} + ' VND'">1.000.0000
+									VND</td>
+								<td><a type="button" class="btn btn-danger"
+									th:href="@{/shop/my-order/remove(id=${item.product_id})}">
+										<i class="fas fa-trash-alt"></i> Delete
+								</a></td>
+							</form>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th scope="row"><h4>Total</h4></th>
+							<th colspan="3"></th>
+							<td class="font-italic font-weight-bold text-danger"
+								th:text="${quantity}">50</td>
+							<td class="font-italic font-weight-bold text-danger"
+								th:text="${#numbers.formatDecimal(totail, 0, 'COMMA', 0, 'POINT')} + ' VND'">10.000.0000 VND</td>
+							<td><a type="button" class="btn btn-success"
+								th:href="@{/shop/check-out}"> <i class="fas fa-money-check"></i>
+									Check out
+							</a></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>

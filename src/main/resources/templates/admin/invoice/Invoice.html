@@ -1,0 +1,268 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="container-lg">
+			<br>
+			<table class="table table-hover table-borderless text-center">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col"><a
+							th:href="@{/invoicepage(field=order.user.email, size=20)}">Email</a></th>
+						<th scope="col"><a
+							th:href="@{/invoicepage(field=order.user.fullName, size=20)}">Full
+								name</a></th>
+						<th scope="col"><a
+							th:href="@{/invoicepage(field=order.deliveryAddress, size=20)}">Delivery
+								address</a></th>
+						<th scope="col">Product number</th>
+						<th scope="col">Total money</th>
+						<th scope="col"><a
+							th:href="@{/invoicepage(field=order.createDay, size=20)}">Order
+								date</a></th>
+						<th scope="col"><a
+							th:href="@{/invoicepage(field=order.status, size=20)}">Status</a></th>
+						<th scope="col"><a
+							th:href="@{/invoicepage(field=order.pay, size=20)}">Pay</a></th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="invoice, i : ${resultPage.content}">
+						<th scope="row" th:text="${i.count}">1</th>
+						<td th:text="${invoice[2]}">vodai109@gmail.com</td>
+						<td th:text="${invoice[1]}">Vo Van Dai</td>
+						<td th:text="${invoice[3]}">TP Da Nang</td>
+						<td th:text="${invoice[5]}">20</td>
+						<td
+							th:text="${#numbers.formatDecimal(invoice[6], 0, 'COMMA', 0, 'POINT')} + ' VND'">10.000.000
+							VND</td>
+						<td th:text="${#dates.format(invoice[4], 'dd-MM-yyyy')}">20/10/2022</td>
+						<td th:text="${invoice[7]}">Delivered</td>
+						<td th:text="${invoice[8]}"
+							th:class="${invoice[8]} == 'paid' ? 'text-success font-weight-bolder':'text-danger font-weight-bolder'">Paid</td>
+						<td>
+							<button type="button" class="btn btn-secondary"
+								th:data-id="${invoice[0]}"
+								onclick="viewInvoice(this.getAttribute('data-id'))">
+								<i class="fas fa-eye"></i> View
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row text-muted">
+				<div class="col-md-4 d-flex justify-content-start">
+					<form th:action="@{/invoicepage(field=field, size=size)}">
+						<div class="form-check-inline">
+							<select class="custom-select" name="size" id="size"
+								onchange="this.form.submit()">
+								<option th:selected="${size == 5}" value="5">5</option>
+								<option th:selected="${size == 10}" value="10">10</option>
+								<option th:selected="${size == 15}" value="15">15</option>
+								<option th:selected="${size == 20}" value="20">20</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-4 d-flex justify-content-center">
+					<nav aria-label="Page navigation example"
+						th:if="${resultPage.totalPages > 0}">
+						<ul class="pagination">
+							<li
+								th:class="${resultPage.number + 1 == 1} ? 'page-item active' : 'page-item'">
+								<a
+								th:href="@{/invoicepage(field=${field}, page=${1}, size=${resultPage.size})}"
+								class="page-link">First </a>
+							</li>
+							<!--<li class="page-item"><a
+								th:href="@{/userpage/list(field=${field}, page=${resultPage.number - 1}, size=${resultPage.size})}"
+								class="page-link">Previous </a></li>-->
+							<!-- <li class="page-item"><a class="page-link" href="#">1</a></li>
+							<li class="page-item"><a class="page-link" href="#">2</a></li>
+							<li class="page-item"><a class="page-link" href="#">3</a></li>-->
+							<li class="page-item active"
+								th:each=" pageNumber : ${pageNumbers}"
+								th:if="${resultPage.totalPages > 1}"
+								th:class="${pageNumber == resultPage.number + 1} ? 'page-item active' : 'page-item'">
+								<a
+								th:href="@{/invoicepage(field=${field}, page=${pageNumber}, size=${resultPage.size})}"
+								th:text="${pageNumber}" class="page-link">1-2-3 </a>
+							</li>
+							<!-- <li class="page-item"><a
+								th:href="@{/userpage/list(field=${field}, page=${resultPage.number + 1}, size=${resultPage.size})}"
+								class="page-link">Next </a></li>-->
+							<li
+								th:class="${resultPage.number + 1 == resultPage.totalPages} ? 'page-item active' : 'page-item'">
+								<a
+								th:href="@{/invoicepage(field=${field}, page=${resultPage.totalPages}, size=${resultPage.size})}"
+								class="page-link">Last </a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+				<div class="col-md-4 d-flex justify-content-end">
+					<form th:action="@{/invoicepage}" class="form-inline my-2 my-lg-0">
+						<input class="form-control mr-sm-2" type="search"
+							placeholder="Search by full name" name="invoicepagekeywords"
+							th:value="${invoicepagekeywords}">
+						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+							<i class="fas fa-search"></i> Search
+						</button>
+					</form>
+				</div>
+			</div>
+			<ul class="list-group col-md-3 mt-4">
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Current entity number: <span
+					th:text="${resultPage.numberOfElements}" class="text-danger">14</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Page number: <span th:text="${resultPage.number}"
+					class="text-danger">2</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Page size: <span th:text="${resultPage.size}" class="text-danger">1</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Total entity number: <span th:text="${resultPage.totalElements}"
+					class="text-danger">14</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Total page number: <span th:text="${resultPage.totalPages}"
+					class="text-danger">2</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Sort by: <span th:text="${field}" class="text-danger">2</span>
+				</li>
+			</ul>
+		</div>
+
+		<div class="modal fade" id="modelView" data-backdrop="static"
+			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Invoice
+							information</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-4">
+								<p>
+								<h6 class="font-weight-bolder">Invoice code:</h6>
+								<span class="font-italic text-danger" id="invoiceCode"> ##################</span>
+								</p>
+							</div>
+							<div class="col-md-4">
+								<p>
+								<h6 class="font-weight-bolder">Full name:</h6>
+								<span class="font-italic text-danger" id="fullName"> Vo Van Dai </span>
+								</p>
+							</div>
+							<div class="col-md-4">
+								<p>
+								<h6 class="font-weight-bolder">Email:</h6>
+								<span class="font-italic text-danger" id="email"> Vodai109@gmail.com</span>
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<p>
+								<h6 class="font-weight-bolder">Delivery address:</h6>
+								<span class="font-italic text-danger" id="address"> TP Da Nang </span>
+								</p>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="status" class="font-weight-bolder">Status:</label>
+								<div class="form-group">
+									<div class="form-check-inline">
+										<input class="form-check-input" type="radio" name="status"
+											id="delivered" value="delivered"> <label
+											class="form-check-label text-success" for="delivered">
+											Delivered </label>
+									</div>
+									<div class="form-check-inline">
+										<input class="form-check-input" type="radio" name="status"
+											id="beingTransported" value="beingTransported"> <label
+											class="form-check-label text-warning" for="beingTransported">
+											Being transported </label>
+									</div>
+									<div class="form-check-inline">
+										<input class="form-check-input" type="radio" name="status"
+											id="waiting" value="waiting"> <label
+											class="form-check-label text-danger" for="waiting">
+											Waiting </label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="pay" class="font-weight-bolder">Pay:</label>
+								<div class="form-group">
+									<div class="form-check-inline">
+										<input class="form-check-input" type="radio" name="pay"
+											id="paid" value="paid"> <label
+											class="form-check-label text-success" for="paid">
+											Paid </label>
+									</div>
+									<div class="form-check-inline">
+										<input class="form-check-input" type="radio" name="pay"
+											id="unpaid" value="unpaid"> <label
+											class="form-check-label text-danger" for="unpaid">
+											Unpaid </label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<table class="table table-hover table-dark">
+								<thead>
+									<tr>
+										<th scope="col" style="max-width: 260px;">Image</th>
+										<th scope="col">Name</th>
+										<th scope="col">Category</th>
+										<th scope="col">Price</th>
+										<th scope="col">Quantity</th>
+										<th scope="col">Totail</th>
+									</tr>
+								</thead>
+								<tbody id="tbodyExample">
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">
+							<i class="fas fa-window-close"></i> Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+</head>
+
+<body>
+	<div th:fragment="favitory">
+		<div class="modal fade" id="baseFavitories" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="baseFavitoriesLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="baseFavitoriesLabel">Add to your
+							favorites list ?</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card mb-3">
+								<div class="row no-gutters m-3">
+									<div class="col-md-4">
+										<img src="" alt="NoImage" style="max-width: 250px"
+											id="viewimage" />
+									</div>
+									<div class="col-md-8">
+										<div class="card-body">
+											<h3 class="card-title font-italic font-weight-bold"
+												id="viewname">Iphone 5s</h3>
+											<p class="card-text font-italic text-danger" id="viewprice">10.000.000
+												VND</p>
+											<p class="card-text">
+												<small class="text-muted" id="viewdescription">Lorem
+													ipsum, dolor sit amet consectetur adipisicing elit.
+													Eligendi ducimus, exercitationem aperiam quaerat at
+													possimus totam amet soluta tempora autem officiis nulla
+													quae architecto nemo doloremque suscipit dignissimos earum
+													quam!</small>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<a type="button" class="btn btn-primary" id="yesOption">Add</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

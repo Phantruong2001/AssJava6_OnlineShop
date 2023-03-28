@@ -1,0 +1,82 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{user/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+
+		<div class="row">
+			<div class="col-md-6 offset-md-3 mt-3">
+				<div class="row">
+					<div class="col-md-6">
+						<img
+							th:src="${product.image!=null ? '/uploads/' + product.image : ''}"
+							alt="" class="rounded mx-auto d-block" style="max-width: 350px;">
+					</div>
+					<div class="col-md-6">
+						<h3 class="font-italic font-weight-bold" th:text="${product.name}">Iphone
+							5s</h3>
+						<div class="row">
+							<div class="col-md-4">
+								<strong>Price: </strong>
+							</div>
+							<div class="col-md-8">
+								<p class="font-italic text-danger"
+									th:if="${product.discount} == 0"
+									th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">10.000.000
+									VND</p>
+								<p class="font-italic" th:if="${product.discount} > 0">
+									<del class="text-dark"
+										th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</del>
+									<b class="text-danger"
+										th:text="${#numbers.formatDecimal(product.price * product.discount * 0.01, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</b>
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<strong>Still in stock ? </strong>
+							</div>
+							<div class="col-md-8">
+								<p
+									th:if="${product.quantity} > 1 ? 'Stocking' : 'Temporarily out of stock'"
+									th:class="${product.quantity} > 1 ? 'font-italic text-success' : 'font-italic text-danger'">Stocking</p>
+							</div>
+						</div>
+						<p class="font-italic">
+							<strong>Description: </strong><span
+								th:text="${product.description}"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<button type="button" class="btn btn-primary"
+							th:if="${session.user} != null" th:data-id="${product.id}"
+							onclick="viewLike(this.getAttribute('data-id'))">
+							<i class="fas fa-heart"></i>
+						</button>
+						<button type="button" class="btn btn-primary"
+							th:data-id="${product.id}"
+							onclick="viewAddToCart(this.getAttribute('data-id'))">
+							<i class="fas fa-cart-arrow-down"></i>
+						</button>
+						<a type="button" class="btn btn-primary"
+							th:if="${session.user} != null"
+							th:href="@{/shop/share(id=${product.id})}"> <i
+							class="fas fa-share"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div th:replace="user/fragments/modelFavitory:: favitory"></div>
+
+		<div th:replace="user/fragments/modelAddToCart:: addToCart"></div>
+
+	</div>
+</body>
+
+</html>

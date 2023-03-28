@@ -1,0 +1,6 @@
+table>tbody>tr>td>img {
+    display: inline-block;
+    max-width: 250px;
+    max-height: 250px;
+    object-fit: cover;
+}

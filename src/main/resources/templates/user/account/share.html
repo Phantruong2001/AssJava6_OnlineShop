@@ -1,0 +1,79 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{user/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+
+		<div class="col-md-8 offset-md-2 mt-3">
+			<form th:action="@{/shop/share}" method="POST" th:object="${share}">
+				<div class="row">
+					<div class="form-group col-md-6">
+						<label for="emailTo">Email share:</label> <input type="email"
+							th:field="*{emailTo}" class="form-control" name="emailTo"
+							id="emailTo" placeholder="Email ?" required>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="subject">Subject</label> <input type="text"
+							th:field="*{subject}" class="form-control" name="subject"
+							id="subject" placeholder="Subject ?">
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-md-12">
+						<label for="note">Note</label>
+						<textarea class="form-control" name="note" id="note" rows="3"
+							th:field="*{note}"></textarea>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card mb-3">
+							<div class="row no-gutters m-3">
+								<div class="col-md-4">
+									<img
+										th:src="${product.image!=null ? '/uploads/' + product.image : ''}"
+										alt="..." style="max-width: 400px;">
+								</div>
+								<div class="col-md-8" th:object="${product}">
+									<div class="card-body">
+										<h3 class="card-title font-italic font-weight-bold"
+											th:text="${product.name}">Iphone 5s</h3>
+										<p class="card-text font-italic text-danger"
+											th:if="${product.discount} == 0"
+											th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">10.000.000
+											VND</p>
+										<p class="card-text font-italic"
+											th:if="${product.discount} > 0">
+											<del class="text-dark"
+												th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</del>
+											<b class="text-danger"
+												th:text="${#numbers.formatDecimal(product.price * product.discount * 0.01, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</b>
+										</p>
+										<p class="card-text">
+											<small class="text-muted" th:text="${product.description}">Lorem
+												ipsum, dolor sit amet consectetur adipisicing elit. Eligendi
+												ducimus, exercitationem aperiam quaerat at possimus totam
+												amet soluta tempora autem officiis nulla quae architecto
+												nemo doloremque suscipit dignissimos earum quam!</small>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary">
+					<i class="fas fa-envelope"></i> Sent email
+				</button>
+			</form>
+		</div>
+
+	</div>
+</body>
+
+</html>

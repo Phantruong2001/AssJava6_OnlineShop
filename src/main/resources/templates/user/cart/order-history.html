@@ -1,0 +1,68 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{user/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="row" th:if="${session.user} == null">
+			<div class="col-md-6 offset-md-3">
+				<h3>Sign in to see a list of already liked products</h3>
+			</div>
+		</div>
+		<div class="row m-3" th:if="${session.user} != null">
+			<div class="row" th:if="${list.empty}">
+				<div class="col-md-6 offset-md-3">
+					<h3>You haven't liked any products yet</h3>
+				</div>
+			</div>
+			<table class="table table-borderless text-center"
+				th:unless="${list.empty}">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col"><a
+							th:href="@{/shop/order-history(field=order.deliveryAddress)}">Address</a></th>
+						<th scope="col">Quantity</th>
+						<th scope="col">Total money</th>
+						<th scope="col"><a
+							th:href="@{/shop/order-history(field=order.createDay)}">Order
+								date</a></th>
+						<th scope="col"><a
+							th:href="@{/shop/order-history(field=order.status)}">Status</a></th>
+						<th scope="col"><a
+							th:href="@{/shop/order-history(field=order.pay)}">Pay</a></th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item, i : ${list}">
+						<th scope="row" th:text="${i.count}">1</th>
+						<td th:text="${item[1]}">Address</td>
+						<td th:text="${item[2]}">Quantity</td>
+						<td
+							th:text="${#numbers.formatDecimal(item[3], 0, 'COMMA', 0, 'POINT')} + ' VND'">Total
+							money</td>
+						<td th:text="${#dates.format(item[4], 'dd-MM-yyyy')}">Order
+							date</td>
+						<td th:text="${item[5]}">Status</td>
+						<td th:text="${item[6]}"
+							th:class="${item[6]} == 'paid' ? 'text-success font-weight-bolder':'text-danger font-weight-bolder'">Pay</td>
+						<td>
+							<button type="button" class="btn btn-danger" data-toggle="modal"
+								data-target="#modelDelete">
+								<i class="fas fa-trash-alt"></i> Delete
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</body>
+
+</html>

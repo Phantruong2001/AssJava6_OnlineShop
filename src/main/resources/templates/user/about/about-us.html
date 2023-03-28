@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{user/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="container text-center mt-3">
+					<h3>THE SHOP</h3>
+					<p>
+						<em>We love smartphone!</em>
+					</p>
+					<p>Online shop specializing in selling mobile phone products
+						and mobile phone accessories of many different brands such as:
+						Samsung, Xiaomi, Oppo, Apple,... In particular, the F.Studio By
+						FPT system is a chain. Apple's official authorized store in
+						Vietnam at the highest level, specializing in selling genuine
+						Apple products. FPT Retail is the first company to have a retail
+						chain with Apple's standard store model, including: AAR (Apple
+						Authorized Reseller) and iCorner, giving customers a great space
+						to experience unique technology products. Apple's uniqueness and
+						sophistication with the most friendly and superior sales and
+						customer service quality.</p>
+					<br>
+					<div class="row">
+						<div class="col-md-4 offset-md-4">
+							<h2 class="text-center">
+								<strong>Vo Van Dai</strong>
+							</h2>
+							<br> <a href="#demo" data-toggle="collapse"> <img
+								th:src="@{../images/avt.jpg}" class="img-circle"
+								alt="Random Name"
+								style="border-radius: 100%; max-width: 255px; max-height: 255px;">
+							</a>
+							<div id="demo" class="collapse">
+								<p>Loves iphone</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>

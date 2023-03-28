@@ -1,0 +1,28 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div th:replace="admin/fragments/message:: message"></div>
+
+		<nav aria-label="breadcrumb" class="mt-3">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/productpage/list}"><i
+						class="fas fa-list"></i> List</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/productpage/form}"><i
+						class="fas fa-keyboard"></i> Form</a></li>
+			</ol>
+		</nav>
+
+		<div layout:fragment="contentProduct"></div>
+
+	</div>
+
+</body>
+
+</html>

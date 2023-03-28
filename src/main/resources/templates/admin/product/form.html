@@ -1,0 +1,101 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/product/product.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="contentProduct">
+		<div class="container-lg">
+			<br>
+			<form th:object="${product}" method="post"
+				enctype="multipart/form-data">
+				<input type="hidden" th:field="*{id}">
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="name">Product name:</label> <input type="text"
+							th:field="*{name}" class="form-control" name="name" id="name"
+							placeholder="Product name ?">
+						<div class="text-danger" th:if="${#fields.hasErrors('name')}"
+							th:errors="*{name}"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="price">Price:</label> <input type="number"
+							th:field="*{price}" class="form-control" name="price" id="price"
+							min="0">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-3">
+						<label for="quantity">Quantity:</label> <input type="number"
+							th:field="*{quantity}" class="form-control" name="quantity"
+							id="quantity" min="0">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="discount">Discount:</label> <input type="number"
+							th:field="*{discount}" class="form-control" name="discount"
+							id="discount" min="0" max="100">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="active">Active:</label>
+						<div class="form-group">
+							<div class="form-check-inline">
+								<input class="form-check-input" type="radio" name="active"
+									id="active" th:field="*{active}" th:value="true" checked> <label
+									class="form-check-label" for="active"> Active </label>
+							</div>
+							<div class="form-check-inline">
+								<input class="form-check-input" type="radio" name="active"
+									id="unActive" th:field="*{active}" th:value="false"> <label
+									class="form-check-label" for="unActive"> UnActive </label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="category">Category:</label> <select id="inputState"
+							class="form-control" th:field="*{category.id}">
+							<option th:each=" item : ${categories}" th:value="${item.id}"
+								th:text="${item.name}"
+								th:selected="${item.id==product.category.id}">Category
+								Name</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="name">Image:</label> <img
+							th:src="${product.image !=null ? '/uploads/' + product.image: '' }"
+							alt="NoImage" class="img-fluid" id="blah" style="max-width: 260px;">
+						<div class="custom-file mb-3">
+							<input type="file" class="custom-file-input m-2" id="file"
+								name="file" onchange="readURLProductForm(this);"> <label
+								class="custom-file-label" for="customFile">Choose file</label>
+						</div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="price">Description:</label>
+						<textarea th:field="*{description}" class="form-control"
+							name="description" id="description" rows="3"></textarea>
+					</div>
+				</div>
+				<button th:formaction="@{/productpage/form/create}"
+					class="btn btn-primary">
+					<i class="fas fa-plus"></i> Create
+				</button>
+				<button th:formaction="@{/productpage/form/update}"
+					class="btn btn-warning">
+					<i class="fas fa-wrench"></i> Update
+				</button>
+				<button th:formaction="@{/productpage/form}" class="btn btn-info">
+					<i class="fas fa-eraser"></i> Reset
+				</button>
+			</form>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

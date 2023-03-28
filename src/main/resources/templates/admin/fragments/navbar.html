@@ -1,0 +1,70 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+</head>
+
+<body>
+	<div th:fragment="navbar">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" th:href="@{/homepage}"><i
+				class="fab fa-shopify"></i> ADMIN</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><a class="nav-link"
+						th:href="@{/homepage}"><i class="fas fa-home"></i> Home <span
+							class="sr-only">(current)</span></a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/productpage/list}"><i class="fas fa-box-open"></i>
+							Products</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/categorypage/list}"><i class="fas fa-tshirt"></i>
+							Categories</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/userpage/list}"><i class="fas fa-users"></i> Users</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/invoicepage}"><i class="fas fa-file-invoice"></i>
+							Invoice</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/reportpage}"><i class="fas fa-chart-line"></i>
+							Report</a></li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" role="button"
+						data-toggle="dropdown" aria-expanded="false"> <i
+							class="fas fa-user-circle"></i> <span
+							th:if="${session.user == null}">Account</span> <span
+							th:unless="${session.user == null}">Admin</span>
+					</a>
+						<div class="dropdown-menu" th:unless="${session.user} == null">
+
+							<a class="dropdown-item" th:href="@{/accountpage/logout}">Logout</a>
+						</div>
+						<div class="dropdown-menu" th:if="${session.user == null}">
+							<a class="dropdown-item" th:href="@{/accountpage/login}">Login</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item"
+								th:href="@{/accountpage/forgot-password}">Forgot password</a> <a
+								class="dropdown-item" th:href="@{/accountpage/register}">Register</a>
+						</div></li>
+				</ul>
+				<form class="form-inline my-2 my-lg-0">
+					<input class="form-control mr-sm-2" type="search"
+						placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+						<i class="fas fa-search"></i> Search
+					</button>
+				</form>
+			</div>
+		</nav>
+	</div>
+</body>
+
+</html>

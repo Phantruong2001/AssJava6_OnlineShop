@@ -1,0 +1,139 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{user/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+
+		<div th:replace="user/fragments/message:: message"></div>
+
+		<div class="jumbotron mt-3">
+			<h1 class="display-4">Hello, friend!</h1>
+			<p class="lead">We Believe in Service, and you Know that.</p>
+			<hr class="my-4">
+			<p>Endless beauty, officially chosen to become the slogan of
+				Vietnam's tourism, with the lotus symbol with 5 petals and 5 colors
+				blooming as if affirming the new development phase of the industry
+				with the meaning that the period will shine. sharp.</p>
+			<a class="btn btn-primary btn-lg" th:href="@{/shop/shop-now}"
+				role="button"><i class="fab fa-shopify"></i> Shop now</a>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-2 mb-3" th:each="product, i : ${listProduct}">
+						<div class="card-sl">
+							<div class="card-image">
+							<a th:href="@{/shop/deltail(id=${product.id})}">
+								<img
+									th:src="${product.image!=null ? '/uploads/' + product.image : ''}" /></a>
+							</div>
+							<a class="card-action-1" th:if="${session.user} != null"
+								th:data-id="${product.id}"
+								onclick="viewLike(this.getAttribute('data-id'))"><i
+								class="fa fa-heart"></i></a> <a class="card-action"
+								th:if="${session.user} != null"
+								th:href="@{/shop/share(id=${product.id})}"><i
+								class="fas fa-share"></i></a>
+							<div class="pt-5 d-inline-block text-truncate card-heading"
+								th:text="${product.name}">Audi Q8</div>
+							<p class="card-text font-italic text-danger"
+								th:if="${product.discount} == 0"
+								th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">10.000.000
+								VND</p>
+							<p class="card-text font-italic" th:if="${product.discount} > 0">
+								<del class="text-dark"
+									th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</del>
+								<b class="text-danger"
+									th:text="${#numbers.formatDecimal(product.price * product.discount * 0.01, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</b>
+							</p>
+							<a class="card-button" th:data-id="${product.id}"
+								onclick="viewAddToCart(this.getAttribute('data-id'))"><i
+								class="fas fa-cart-arrow-down"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 m-3 text-center"><h2>Top 10 like products</h2></div>
+				<div class="col-md-2 mb-3"
+					th:each="product, i : ${listProductFavority}">
+					<div class="card-sl">
+						<div class="card-image">
+							<img
+								th:src="${product.image!=null ? '/uploads/' + product.image : ''}" />
+						</div>
+						<a class="card-action-1" th:if="${session.user} != null"
+							th:data-id="${product.id}"
+							onclick="viewLike(this.getAttribute('data-id'))"><i
+							class="fa fa-heart"></i></a> <a class="card-action"
+							th:if="${session.user} != null"
+							th:href="@{/shop/share(id=${product.id})}"><i
+							class="fas fa-share"></i></a>
+						<div class="pt-5 d-inline-block text-truncate card-heading"
+							th:text="${product.name}">Audi Q8</div>
+						<p class="card-text font-italic text-danger"
+							th:if="${product.discount} == 0"
+							th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">10.000.000
+							VND</p>
+						<p class="card-text font-italic" th:if="${product.discount} > 0">
+							<del class="text-dark"
+								th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</del>
+							<b class="text-danger"
+								th:text="${#numbers.formatDecimal(product.price * product.discount * 0.01, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</b>
+						</p>
+						<a class="card-button" th:data-id="${product.id}"
+							onclick="viewAddToCart(this.getAttribute('data-id'))"><i
+							class="fas fa-cart-arrow-down"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 m-3 text-center"><h2>Top 10 share products</h2></div>
+				<div class="col-md-2 mb-3"
+					th:each="product, i : ${listProductShare}">
+					<div class="card-sl">
+						<div class="card-image">
+							<img
+								th:src="${product.image!=null ? '/uploads/' + product.image : ''}" />
+						</div>
+						<a class="card-action-1" th:if="${session.user} != null"
+							th:data-id="${product.id}"
+							onclick="viewLike(this.getAttribute('data-id'))"><i
+							class="fa fa-heart"></i></a> <a class="card-action"
+							th:if="${session.user} != null"
+							th:href="@{/shop/share(id=${product.id})}"><i
+							class="fas fa-share"></i></a>
+						<div class="pt-5 d-inline-block text-truncate card-heading"
+							th:text="${product.name}">Audi Q8</div>
+						<p class="card-text font-italic text-danger"
+							th:if="${product.discount} == 0"
+							th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">10.000.000
+							VND</p>
+						<p class="card-text font-italic" th:if="${product.discount} > 0">
+							<del class="text-dark"
+								th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</del>
+							<b class="text-danger"
+								th:text="${#numbers.formatDecimal(product.price * product.discount * 0.01, 0, 'COMMA', 0, 'POINT')} + ' VND'">VND</b>
+						</p>
+						<a class="card-button" th:data-id="${product.id}"
+							onclick="viewAddToCart(this.getAttribute('data-id'))"><i
+							class="fas fa-cart-arrow-down"></i></a>
+					</div>
+				</div>
+			</div>
+
+			<div th:replace="user/fragments/modelFavitory:: favitory"></div>
+
+			<div th:replace="user/fragments/modelAddToCart:: addToCart"></div>
+
+		</div>
+</body>
+
+</html>

@@ -1,0 +1,265 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/product/product.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="contentProduct">
+		<div class="container-lg">
+			<br>
+			<table class="table table-hover table-borderless text-center">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col" style="max-width: 260px;">Image</th>
+						<th scope="col"><a th:href="@{/productpage/list(field=name, size=20)}">Name</a></th>
+						<th scope="col"><a
+							th:href="@{/productpage/list(field=category_id, size=20)}">Category</a></th>
+						<th scope="col"><a
+							th:href="@{/productpage/list(field=quantity, size=20)}">Quantity</a></th>
+						<th scope="col"><a
+							th:href="@{/productpage/list(field=price, size=20)}">Price</a></th>
+						<th scope="col"><a
+							th:href="@{/productpage/list(field=active, size=20)}">Active</a></th>
+						<th scope="col"><a
+							th:href="@{/productpage/list(field=discount, size=20)}">Discount</a></th>
+						<th scope="col"><a
+							th:href="@{/productpage/list(field=createDay, size=20)}">Create day</a></th>
+						<th scope="col"><a
+							th:href="@{/productpage/list(field=updateDate, size=20)}">Update date</a></th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="product, i : ${resultPage.content}">
+						<th scope="row" th:text="${i.count}">1</th>
+						<td class="w-25"><img
+							th:src="${product.image!=null ? '/uploads/' + product.image : ''}"
+							class="img-rounded" alt="NoImage"></td>
+						<td th:text="${product.name}">Iphone 5s</td>
+						<td th:text="${product.category.name}">Phone</td>
+						<td th:text="${product.quantity}"
+							th:class="${product.quantity} > 50 ? 'text-success font-weight-bolder' : 'text-info font-weight-bolder' ">50</td>
+						<td
+							th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">50</td>
+						<td th:text="${product.active ? 'Active' : 'UnActive'}"
+							th:class="${product.active} ? 'text-success font-weight-bolder' : 'text-info font-weight-bolder' ">Iphone
+							5s</td>
+						<td th:text="${product.discount} + ' %'">Phone</td>
+						<td th:text="${#dates.format(product.createDay, 'dd-MM-yyyy')}">10.000.000
+							VND</td>
+						<td th:text="${#dates.format(product.createDay, 'dd-MM-yyyy')}">Active</td>
+						<td><a type="button" class="btn btn-secondary"
+							th:href="@{/productpage/edit(id=${product.id})}"> <i
+								class="fas fa-edit"></i>
+						</a>
+							<button th:data-id="${product.id}" th:data-name="${product.name}"
+								onclick="deleteProduct(this.getAttribute('data-id'), this.getAttribute('data-name'))"
+								type="button" class="btn btn-danger">
+								<i class="fas fa-trash-alt"></i>
+							</button>
+							<button type="button" class="btn btn-primary"
+								th:data-id="${product.id}"
+								onclick="viewProduct(this.getAttribute('data-id'))">
+								<i class="fas fa-eye"></i>
+							</button></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row text-muted">
+				<div class="col-md-4 d-flex justify-content-start">
+					<form th:action="@{/productpage/list(field=field, size=size)}">
+						<div class="form-check-inline">
+							<select class="custom-select" name="size" id="size"
+								onchange="this.form.submit()">
+								<option th:selected="${resultPage.size == 5}" value="5">5</option>
+								<option th:selected="${resultPage.size == 10}" value="10">10</option>
+								<option th:selected="${resultPage.size == 15}" value="15">15</option>
+								<option th:selected="${resultPage.size == 20}" value="20">20</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-4 d-flex justify-content-center">
+					<nav aria-label="Page navigation example"
+						th:if="${resultPage.totalPages > 0}">
+						<ul class="pagination">
+							<li
+								th:class="${resultPage.number + 1 == 1} ? 'page-item active' : 'page-item'">
+								<a
+								th:href="@{/productpage/list(field=${field}, page=${1}, size=${resultPage.size})}"
+								class="page-link">First </a>
+							</li>
+							<!--<li class="page-item"><a
+								th:href="@{/userpage/list(field=${field}, page=${resultPage.number - 1}, size=${resultPage.size})}"
+								class="page-link">Previous </a></li>-->
+							<!-- <li class="page-item"><a class="page-link" href="#">1</a></li>
+							<li class="page-item"><a class="page-link" href="#">2</a></li>
+							<li class="page-item"><a class="page-link" href="#">3</a></li>-->
+							<li class="page-item active"
+								th:each=" pageNumber : ${pageNumbers}"
+								th:if="${resultPage.totalPages > 1}"
+								th:class="${pageNumber == resultPage.number + 1} ? 'page-item active' : 'page-item'">
+								<a
+								th:href="@{/productpage/list(field=${field}, page=${pageNumber}, size=${resultPage.size})}"
+								th:text="${pageNumber}" class="page-link">1-2-3 </a>
+							</li>
+							<!-- <li class="page-item"><a
+								th:href="@{/userpage/list(field=${field}, page=${resultPage.number + 1}, size=${resultPage.size})}"
+								class="page-link">Next </a></li>-->
+							<li
+								th:class="${resultPage.number + 1 == resultPage.totalPages} ? 'page-item active' : 'page-item'">
+								<a
+								th:href="@{/productpage/list(field=${field}, page=${resultPage.totalPages}, size=${resultPage.size})}"
+								class="page-link">Last </a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+				<div class="col-md-4 d-flex justify-content-end">
+					<form th:action="@{/productpage/list}"
+						class="form-inline my-2 my-lg-0">
+						<input class="form-control mr-sm-2" type="search"
+							placeholder="Search by full name" name="productpagekeywords"
+							th:value="${productpagekeywords}">
+						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+							<i class="fas fa-search"></i> Search
+						</button>
+					</form>
+				</div>
+			</div>
+			<ul class="list-group col-md-3 mt-4">
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Current entity number: <span
+					th:text="${resultPage.numberOfElements}" class="text-danger">14</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Page number: <span th:text="${resultPage.number}"
+					class="text-danger">2</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Page size: <span th:text="${resultPage.size}" class="text-danger">1</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Total entity number: <span th:text="${resultPage.totalElements}"
+					class="text-danger">14</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Total page number: <span th:text="${resultPage.totalPages}"
+					class="text-danger">2</span>
+				</li>
+				<li
+					class="list-group-item d-flex justify-content-between align-items-center">
+					Sort by: <span th:text="${field}" class="text-danger">2</span>
+				</li>
+			</ul>
+		</div>
+
+		<div class="modal fade" id="modelDelete" data-backdrop="static"
+			tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Delete product
+							?</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						Do you want to delete the product ? <span id="name">Full
+							name</span> ?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">
+							<i class="fas fa-window-close"></i> Close
+						</button>
+						<a type="button" class="btn btn-danger" id="yesOption"> <i
+							class="fas fa-trash-alt"></i> Delete
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="modelView" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="staticBackdropLabel">Product
+							information</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p class="font-weight-bold">
+							ID: <span class="text-danger font-italic" id="viewid"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Name: <span class="text-danger font-italic" id="viewname"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Quantity: <span class="text-danger font-italic" id="viewquantity"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Price: <span class="text-danger font-italic" id="viewprice"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Image: <span class="text-danger font-italic" id="viewimage"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Description: <span class="text-danger font-italic"
+								id="viewdescription"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Discount: <span class="text-danger font-italic" id="viewdiscount"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Active: <span class="text-danger font-italic" id="viewactive"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Create day: <span class="text-danger font-italic"
+								id="viewcreateDay"></span>
+						</p>
+						<div class="dropdown-divider"></div>
+						<p class="font-weight-bold">
+							Update date: <span class="text-danger font-italic"
+								id="viewupdateDate"></span>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">
+							<i class="fas fa-window-close"></i> Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

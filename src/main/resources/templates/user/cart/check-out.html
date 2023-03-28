@@ -1,0 +1,71 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{user/layout.html}">
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+
+		<div class="col-md-8 offset-md-2 mt-3">
+
+			<div class="row mt-3">
+				<div class="col-md-4 order-md-2 mb-4">
+					<h4 class="d-flex justify-content-between align-items-center mb-3">
+						<span class="text-muted">Your cart</span> <span
+							class="badge badge-secondary badge-pill" th:text="${quantity}">3</span>
+					</h4>
+					<ul class="list-group mb-3">
+						<li th:each="item ,i : ${cart}"
+							class="list-group-item d-flex justify-content-between lh-condensed">
+							<div>
+								<h6 class="my-0 font-italic" th:text="${item.name}">Product
+									name</h6>
+							</div> <span class="text-muted font-italic"
+							th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 0, 'POINT')} + ' VND'">1.000.000
+								VND</span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between"><span>Total</span>
+							<strong class="font-italic"
+							th:text="${#numbers.formatDecimal(totail, 0, 'COMMA', 0, 'POINT')} + ' VND'">10.000.000
+								VND</strong></li>
+					</ul>
+				</div>
+				<div class="col-md-8 order-md-1">
+					<h4 class="mb-3">Billing address</h4>
+					<form th:action="@{/shop/check-out}" th:object="${checkOut}"
+						method="POST">
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<label for="fullName">Full name</label> <input
+									th:field="*{fullname}" type="text" class="form-control"
+									id="fullName" placeholder="Full name ?" required
+									th:disabled="${session.user != null}">
+							</div>
+							<div class="col-md-6 mb-3">
+								<label for="email">Email</label> <input th:field="*{email}"
+									type="email" class="form-control" id="email"
+									placeholder="you@example.com" required
+									th:disabled="${session.user != null}">
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="address">Address</label> <input th:field="*{address}"
+								type="text" class="form-control" id="address"
+								placeholder="1234 Main St" required>
+						</div>
+						<hr class="mb-4">
+						<button class="btn btn-primary btn-lg btn-block" type="submit">Continue
+							to checkout</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>
